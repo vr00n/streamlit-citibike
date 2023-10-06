@@ -159,8 +159,8 @@ def haversine_distance(lat1, lon1, lat2, lon2):
 
 def main():
     st.title("E-bike Finder")
-    lat = None
-    lon = None
+    lat = 40.72834119151125
+    lon = -73.94044153113401
     # Get user's current location
     #lat, lon = st.location()
     # Streamlit layout for location button
