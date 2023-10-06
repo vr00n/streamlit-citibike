@@ -166,7 +166,8 @@ def main():
     address = st.text_input("Enter an address:")
     if address:
         geolocator = Nominatim(user_agent="geoapiExercises")
-        location = geolocator.geocode(address)
+        location = RateLimiter(geolocator.geocode, min_delay_seconds=1)
+        #location = geolocator.geocode(address)
         if location:
             lat, lng = location.latitude, location.longitude
             st.write(f"Latitude: {lat}, Longitude: {lng}")
