@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 import math
-import folium
+#import folium
 from streamlit_folium import folium_static
 
 def fetch_citibike_data():
