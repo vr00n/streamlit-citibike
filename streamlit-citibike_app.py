@@ -7,6 +7,7 @@ from bokeh.models import CustomJS
 from streamlit_bokeh_events import streamlit_bokeh_events
 import math
 from streamlit_folium import folium_static
+from geopy.geocoders import Nominatim
 
 
 def fetch_citibike_data():
@@ -162,31 +163,18 @@ def main():
     
     # Default location (can be any default you want, or even the center of the city)
     lat, lng = 40.72834119151125, -73.94044153113401
-    st.write("Click the button below to get your current location:")
-    loc_button = Button(label="Get Location")
-    loc_button.js_on_event("button_click", CustomJS(code="""
-        navigator.geolocation.getCurrentPosition(
-            (loc) => {
-                document.dispatchEvent(new CustomEvent("GET_LOCATION", {detail: {lat: loc.coords.latitude, lon: loc.coords.longitude}}))
-            }
-        )
-        """))
-
-    # Use a different variable to capture the result
-    location_result = streamlit_bokeh_events(
-        loc_button,
-        events="GET_LOCATION",
-        key="get_location",
-        refresh_on_update=False,
-        override_height=75,
-        debounce_time=0)
- # Check if location data is available
-    if location_result:
-        lat, lng = result["lat"], result["lng"]
-        st.write(f"Your current location is: {lat}, {lon}")
+    address = st.text_input("Enter an address:")
+    if address:
+        geolocator = Nominatim(user_agent="geoapiExercises")
+        location = geolocator.geocode(address)
+        if location:
+            lat, lng = location.latitude, location.longitude
+            st.write(f"Latitude: {lat}, Longitude: {lon}")
+        else:
+            st.write("Could not get the coordinates for this address. Please try a different address.")
     
     # User input for distance
-    distance = st.slider("Select distance from current location (in miles)", 0.1, 5.0,)
+    distance = st.select_slider("Select distance from current location (in miles)", options=[0.1,0.3,0.5,0.7,1.0])
 
     data = fetch_citibike_data()
     filtered_stations = filter_stations_with_ebikes(data)
