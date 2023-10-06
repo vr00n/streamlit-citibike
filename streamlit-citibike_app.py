@@ -169,7 +169,7 @@ def main():
         location = geolocator.geocode(address)
         if location:
             lat, lng = location.latitude, location.longitude
-            st.write(f"Latitude: {lat}, Longitude: {lon}")
+            st.write(f"Latitude: {lat}, Longitude: {lng}")
         else:
             st.write("Could not get the coordinates for this address. Please try a different address.")
     
