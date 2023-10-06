@@ -159,14 +159,10 @@ def haversine_distance(lat1, lon1, lat2, lon2):
 
 def main():
     st.title("E-bike Finder")
-    lat = 40.72834119151125
-    lon = -73.94044153113401
-    data = fetch_citibike_data()
-    filtered_stations = filter_stations_with_ebikes(data)
-
-    # Get user's current location
-    #lat, lon = st.location()
-    # Streamlit layout for location button
+    
+    # Default location (can be any default you want, or even the center of the city)
+    lat, lon = 40.72834119151125, -73.94044153113401
+    
     st.write("Click the button below to get your current location:")
     loc_button = Button(label="Get Location")
     loc_button.js_on_event("button_click", CustomJS(code="""
@@ -186,36 +182,17 @@ def main():
     
     # Check if location data is available
     if result:
-        lat = result["lat"]
-        lon = result["lon"]
+        lat, lon = result["lat"], result["lon"]
         st.write(f"Your current location is: {lat}, {lon}")
     
-        # Ask user for distance
-        distance = st.slider("Select distance from current location (in miles)", 0.1, 5.0, 0.25)
-    
-        # Filter stations by range
-        filtered_stations = filter_stations_by_range(data, (lat, lon), distance)
-    
-        # Display filtered stations on a map
-        m = folium.Map(location=[lat, lon], zoom_start=15)
-    else:
-        st.write("Click the button to get your location.")
-
-    if lat is None:
-        st.write("Please allow location access.")
-        return
-
-    for station in filtered_stations:
-        folium.Marker(
-            [station["location"]["lat"], station["location"]["lon"]],
-            tooltip=f"{station['stationName']}<br>E-Bikes: {station['ebikesAvailable']}").add_to(m)
-
     # User input for distance
-    distance = st.slider("Select distance (miles):", 0.1, 0.25,0.5,0.75,1.0)
+    distance = st.slider("Select distance from current location (in miles)", 0.1, 5.0, 0.25)
 
+    data = fetch_citibike_data()
+    filtered_stations = filter_stations_with_ebikes(data)
 
     m = folium.Map(location=[lat, lon], zoom_start=14)
-
+    
     # Add a marker for the user's location
     folium.Marker([lat, lon], tooltip="You are here", icon=folium.Icon(color="blue", icon="cloud")).add_to(m)
 
