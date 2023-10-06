@@ -173,15 +173,15 @@ def main():
         )
         """))
 
-    # Capture the button click event and get the location
-    result = streamlit_bokeh_events(
+    # Use a different variable to capture the result
+    location_result = streamlit_bokeh_events(
         loc_button,
         events="GET_LOCATION",
         key="get_location",
         refresh_on_update=False,
         override_height=75,
-        debounce_time=0)    
-    # Check if location data is available
+        debounce_time=0)
+ # Check if location data is available
     if result:
         lat, lng = result["lat"], result["lng"]
         st.write(f"Your current location is: {lat}, {lon}")
