@@ -168,18 +168,19 @@ def main():
     loc_button.js_on_event("button_click", CustomJS(code="""
         navigator.geolocation.getCurrentPosition(
             (loc) => {
-                document.dispatchEvent(new CustomEvent("GET_LOCATION", {detail: {lat: loc.coords.latitude, lng: loc.coords.longitude}}))
+                document.dispatchEvent(new CustomEvent("GET_LOCATION", {detail: {lat: loc.coords.latitude, lon: loc.coords.longitude}}))
             }
         )
         """))
+
+    # Capture the button click event and get the location
     result = streamlit_bokeh_events(
         loc_button,
         events="GET_LOCATION",
         key="get_location",
         refresh_on_update=False,
         override_height=75,
-        debounce_time=0)
-    
+        debounce_time=0)    
     # Check if location data is available
     if result:
         lat, lng = result["lat"], result["lng"]
