@@ -159,6 +159,8 @@ def haversine_distance(lat1, lon1, lat2, lon2):
 
 def main():
     st.title("E-bike Finder")
+    lat = None
+    lon = None
     # Get user's current location
     #lat, lon = st.location()
     # Streamlit layout for location button
@@ -204,8 +206,6 @@ def main():
         folium.Marker(
             [station["location"]["lat"], station["location"]["lon"]],
             tooltip=f"{station['stationName']}<br>E-Bikes: {station['ebikesAvailable']}").add_to(m)
-
-    folium_static(m)
 
     # User input for distance
     distance = st.slider("Select distance (miles):", 0.1, 0.25,0.5,0.75,1.0)
