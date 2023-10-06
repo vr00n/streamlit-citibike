@@ -4,3 +4,4 @@ streamlit-folium
 requests
 bokeh
 streamlit_bokeh_events
+geopy
