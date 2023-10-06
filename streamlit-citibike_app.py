@@ -182,7 +182,7 @@ def main():
         override_height=75,
         debounce_time=0)
  # Check if location data is available
-    if result:
+    if location_result:
         lat, lng = result["lat"], result["lng"]
         st.write(f"Your current location is: {lat}, {lon}")
     
