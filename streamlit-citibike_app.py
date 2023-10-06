@@ -161,14 +161,14 @@ def main():
     st.title("E-bike Finder")
     
     # Default location (can be any default you want, or even the center of the city)
-    lat, lon = 40.72834119151125, -73.94044153113401
+    lat, lng = 40.72834119151125, -73.94044153113401
     
     st.write("Click the button below to get your current location:")
     loc_button = Button(label="Get Location")
     loc_button.js_on_event("button_click", CustomJS(code="""
         navigator.geolocation.getCurrentPosition(
             (loc) => {
-                document.dispatchEvent(new CustomEvent("GET_LOCATION", {detail: {lat: loc.coords.latitude, lon: loc.coords.longitude}}))
+                document.dispatchEvent(new CustomEvent("GET_LOCATION", {detail: {lat: loc.coords.latitude, lng: loc.coords.longitude}}))
             }
         )
         """))
@@ -182,24 +182,24 @@ def main():
     
     # Check if location data is available
     if result:
-        lat, lon = result["lat"], result["lon"]
+        lat, lng = result["lat"], result["lng"]
         st.write(f"Your current location is: {lat}, {lon}")
     
     # User input for distance
-    distance = st.slider("Select distance from current location (in miles)", 0.1, 5.0, 0.25)
+    distance = st.slider("Select distance from current location (in miles)", 0.1, 5.0,)
 
     data = fetch_citibike_data()
     filtered_stations = filter_stations_with_ebikes(data)
 
-    m = folium.Map(location=[lat, lon], zoom_start=14)
+    m = folium.Map(location=[lat, lng], zoom_start=14)
     
     # Add a marker for the user's location
-    folium.Marker([lat, lon], tooltip="You are here", icon=folium.Icon(color="blue", icon="cloud")).add_to(m)
+    folium.Marker([lat, lng], tooltip="You are here", icon=folium.Icon(color="blue", icon="cloud")).add_to(m)
 
     for station in filtered_stations:
         station_lat = station['location']['lat']
-        station_lon = station['location']['lon']
-        distance_to_station = haversine_distance(lat, lon, station_lat, station_lon)
+        station_lon = station['location']['lng']
+        distance_to_station = haversine_distance(lat, lng, station_lat, station_lon)
 
         if distance_to_station <= distance:
             ebike_info = ', '.join([f"{ebike['batteryStatus']['distanceRemaining']['value']} miles ({ebike['batteryStatus']['percent']}% battery)" for ebike in station['valid_ebikes']])
