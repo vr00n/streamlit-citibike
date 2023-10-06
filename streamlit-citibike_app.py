@@ -159,10 +159,8 @@ def haversine_distance(lat1, lon1, lat2, lon2):
 
 def main():
     st.title("E-bike Finder")
-
     # Get user's current location
     #lat, lon = st.location()
-
     # Streamlit layout for location button
     st.write("Click the button below to get your current location:")
     loc_button = Button(label="Get Location")
@@ -183,31 +181,31 @@ def main():
     
     # Check if location data is available
     if result:
-        latitude = result["lat"]
-        longitude = result["lon"]
-        st.write(f"Your current location is: {latitude}, {longitude}")
+        lat = result["lat"]
+        lon = result["lon"]
+        st.write(f"Your current location is: {lat}, {lon}")
     
         # Ask user for distance
         distance = st.slider("Select distance from current location (in miles)", 0.1, 5.0, 0.25)
     
         # Filter stations by range
-        filtered_stations = filter_stations_by_range(data, (latitude, longitude), distance)
+        filtered_stations = filter_stations_by_range(data, (lat, lon), distance)
     
         # Display filtered stations on a map
-        m = folium.Map(location=[latitude, longitude], zoom_start=15)
-
-    for station in filtered_stations:
-        folium.Marker(
-            [station["location"]["lat"], station["location"]["lng"]],
-            tooltip=f"{station['stationName']}<br>E-Bikes: {station['ebikesAvailable']}").add_to(m)
-
-    folium_static(m)
+        m = folium.Map(location=[lat, lon], zoom_start=15)
     else:
         st.write("Click the button to get your location.")
 
     if lat is None:
         st.write("Please allow location access.")
         return
+
+    for station in filtered_stations:
+        folium.Marker(
+            [station["location"]["lat"], station["location"]["lon"]],
+            tooltip=f"{station['stationName']}<br>E-Bikes: {station['ebikesAvailable']}").add_to(m)
+
+    folium_static(m)
 
     # User input for distance
     distance = st.slider("Select distance (miles):", 0.1, 0.25,0.5,0.75,1.0)
@@ -222,7 +220,7 @@ def main():
 
     for station in filtered_stations:
         station_lat = station['location']['lat']
-        station_lon = station['location']['lng']
+        station_lon = station['location']['lon']
         distance_to_station = haversine_distance(lat, lon, station_lat, station_lon)
 
         if distance_to_station <= distance:
