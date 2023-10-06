@@ -162,9 +162,8 @@ def main():
     
     # Default location (can be any default you want, or even the center of the city)
     lat, lng = 40.72834119151125, -73.94044153113401
-    
     st.write("Click the button below to get your current location:")
-    loc_button = st.button("Get Location")
+    loc_button = Button(label="Get Location")
     loc_button.js_on_event("button_click", CustomJS(code="""
         navigator.geolocation.getCurrentPosition(
             (loc) => {
