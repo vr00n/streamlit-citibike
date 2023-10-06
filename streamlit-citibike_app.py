@@ -161,6 +161,9 @@ def main():
     st.title("E-bike Finder")
     lat = 40.72834119151125
     lon = -73.94044153113401
+    data = fetch_citibike_data()
+    filtered_stations = filter_stations_with_ebikes(data)
+
     # Get user's current location
     #lat, lon = st.location()
     # Streamlit layout for location button
@@ -210,8 +213,6 @@ def main():
     # User input for distance
     distance = st.slider("Select distance (miles):", 0.1, 0.25,0.5,0.75,1.0)
 
-    data = fetch_citibike_data()
-    filtered_stations = filter_stations_with_ebikes(data)
 
     m = folium.Map(location=[lat, lon], zoom_start=14)
 
