@@ -8,6 +8,7 @@ from streamlit_bokeh_events import streamlit_bokeh_events
 import math
 from streamlit_folium import folium_static
 from geopy.geocoders import Nominatim
+from geopy.extra.rate_limiter import RateLimiter
 
 
 def fetch_citibike_data():
