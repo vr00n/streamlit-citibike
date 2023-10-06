@@ -202,8 +202,8 @@ def main():
             tooltip=f"{station['stationName']}<br>E-Bikes: {station['ebikesAvailable']}").add_to(m)
 
     folium_static(m)
-else:
-    st.write("Click the button to get your location.")
+    else:
+        st.write("Click the button to get your location.")
 
     if lat is None:
         st.write("Please allow location access.")
