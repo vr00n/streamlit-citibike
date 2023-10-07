@@ -7,8 +7,7 @@ from bokeh.models import CustomJS
 from streamlit_bokeh_events import streamlit_bokeh_events
 import math
 from streamlit_folium import folium_static
-from geopy.geocoders import Nominatim
-from geopy.extra.rate_limiter import RateLimiter
+import googlemaps
 
 
 def get_lat_lon_from_address(address, api_key):
