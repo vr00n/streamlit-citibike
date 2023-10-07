@@ -5,3 +5,4 @@ requests
 bokeh
 streamlit_bokeh_events
 geopy
+googlemaps
