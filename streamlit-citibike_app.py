@@ -11,6 +11,14 @@ from geopy.geocoders import Nominatim
 from geopy.extra.rate_limiter import RateLimiter
 
 
+def get_lat_lon_from_address(address, api_key):
+    gmaps = googlemaps.Client(key=api_key)
+    geocode_result = gmaps.geocode(address)
+    if geocode_result:
+        location = geocode_result[0]['geometry']['location']
+        return location['lat'], location['lng']
+    return None, None
+    
 def fetch_citibike_data():
     url = 'https://account.citibikenyc.com/bikesharefe-gql'
     headers = {
@@ -166,14 +174,10 @@ def main():
     lat, lng = 40.72834119151125, -73.94044153113401
     address = st.text_input("Enter an address:")
     if address:
-        geolocator = Nominatim(user_agent="geoapiExercises")
-        location = RateLimiter(geolocator.geocode, min_delay_seconds=1)
-        #location = geolocator.geocode(address)
-        if location:
-            lat, lng = location.latitude, location.longitude
-            st.write(f"Latitude: {lat}, Longitude: {lng}")
-        else:
-            st.write("Could not get the coordinates for this address. Please try a different address.")
+        api_key = "AIzaSyBIn9U1eB5eYb8fD9N3hR-2Rhm8yP2G5Pk"  # Replace with your API key
+        lat, lon = get_lat_lon_from_address(address, api_key)
+        if lat and lon:
+            st.write(f"Your location is: Latitude: {lat}, Longitude: {lon}")
     
     # User input for distance
     distance = st.select_slider("Select distance from current location (in miles)", options=[0.1,0.3,0.5,0.7,1.0])
